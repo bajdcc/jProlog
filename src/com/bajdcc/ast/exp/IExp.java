@@ -1,11 +1,12 @@
 package com.bajdcc.ast.exp;
 
+import com.bajdcc.visit.IAstComponent;
 import com.sun.istack.internal.NotNull;
 
 /**
  * 表达式
  */
-public interface IExp {
+public interface IExp extends IAstComponent {
 
     /**
      * 添加子结点

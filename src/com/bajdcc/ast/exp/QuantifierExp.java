@@ -1,12 +1,15 @@
 package com.bajdcc.ast.exp;
 
 import com.bajdcc.ast.token.IToken;
+import com.bajdcc.visit.AstVisitorArgs;
+import com.bajdcc.visit.IAstComponent;
+import com.bajdcc.visit.IAstVisitor;
 import com.sun.istack.internal.NotNull;
 
 /**
  * 量词
  */
-public class QuantifierExp extends Exp {
+public class QuantifierExp extends Exp implements IAstComponent {
 
     private QuantifierType quantifier;
     private IToken type;
@@ -24,6 +27,19 @@ public class QuantifierExp extends Exp {
             return String.format("存在 %s %s, ", type, id);
         } else {
             return String.format("所有 %s %s, ", type, id);
+        }
+    }
+
+    @Override
+    public void visit(IAstVisitor visitor) {
+        AstVisitorArgs args = new AstVisitorArgs();
+        visitor.visitBegin(this, args);
+        if (args.canVisitChildren()) {
+            type.visit(visitor);
+            id.visit(visitor);
+        }
+        if (args.canVisitEnd()) {
+            visitor.visitEnd(this);
         }
     }
 

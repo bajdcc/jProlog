@@ -1,5 +1,8 @@
 package com.bajdcc.ast.exp;
 
+import com.bajdcc.visit.AstVisitorArgs;
+import com.bajdcc.visit.IAstComponent;
+import com.bajdcc.visit.IAstVisitor;
 import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
@@ -9,7 +12,7 @@ import java.util.StringJoiner;
 /**
  * 参数表达式
  */
-public class ArgumentExp extends Exp {
+public class ArgumentExp extends Exp implements IAstComponent {
 
     private List<IExp> arguments = new ArrayList<>();
 
@@ -25,5 +28,19 @@ public class ArgumentExp extends Exp {
             sj.add(argument.toString());
         }
         return sj.toString();
+    }
+
+    @Override
+    public void visit(IAstVisitor visitor) {
+        AstVisitorArgs args = new AstVisitorArgs();
+        visitor.visitBegin(this, args);
+        if (args.canVisitChildren()) {
+            for (IExp argument : arguments) {
+                argument.visit(visitor);
+            }
+        }
+        if (args.canVisitEnd()) {
+            visitor.visitEnd(this);
+        }
     }
 }

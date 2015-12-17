@@ -1,11 +1,13 @@
 package com.bajdcc.ast.token;
 
+import com.bajdcc.visit.IAstComponent;
+import com.bajdcc.visit.IAstVisitor;
 import com.sun.istack.internal.NotNull;
 
 /**
  * 字面量
  */
-public class TLiteral implements IToken {
+public class TLiteral implements IToken, IAstComponent {
 
     private String literal;
 
@@ -21,5 +23,11 @@ public class TLiteral implements IToken {
     @Override
     public boolean isValid() {
         return true;
+    }
+
+    @Override
+    public void visit(IAstVisitor visitor) {
+        visitor.visitBegin(this);
+        visitor.visitEnd(this);
     }
 }

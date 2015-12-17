@@ -1,12 +1,15 @@
 package com.bajdcc.ast.exp;
 
 import com.bajdcc.ast.token.IToken;
+import com.bajdcc.visit.AstVisitorArgs;
+import com.bajdcc.visit.IAstComponent;
+import com.bajdcc.visit.IAstVisitor;
 import com.sun.istack.internal.NotNull;
 
 /**
  * 单变量
  */
-public class SingleVariableExp extends VariableExp {
+public class SingleVariableExp extends VariableExp implements IAstComponent {
 
     private IToken id;
 
@@ -17,5 +20,17 @@ public class SingleVariableExp extends VariableExp {
     @Override
     public String toString() {
         return id.toString();
+    }
+
+    @Override
+    public void visit(IAstVisitor visitor) {
+        AstVisitorArgs args = new AstVisitorArgs();
+        visitor.visitBegin(this, args);
+        if (args.canVisitChildren()) {
+            id.visit(visitor);
+        }
+        if (args.canVisitEnd()) {
+            visitor.visitEnd(this);
+        }
     }
 }

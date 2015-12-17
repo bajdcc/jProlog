@@ -1,9 +1,6 @@
 package com.bajdcc;
 
-import com.bajdcc.grammar.*;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
+import com.bajdcc.prolog.PrologExecutor;
 
 public class Main {
 
@@ -34,15 +31,8 @@ public class Main {
                 "\n" +
                 "输出(\"凶手是: \",凶手);\n";
         try {
-            ANTLRInputStream input = new ANTLRInputStream(text);
-            PrologLexer lexer = new PrologLexer(input);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            PrologParser parser = new PrologParser(tokens);
-            PrologParser.StartContext tree = parser.start();
-            PrologVisitor<AstStruct> mv = new PrologBaseVisitorImpl();
-            AstStruct ast = mv.visit(tree);
-            System.out.println(ast.getBlock());
-        } catch (RecognitionException e) {
+            PrologExecutor.getInstance().run(text);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
