@@ -17,13 +17,17 @@ public class SingleVariableExp extends VariableExp implements IAstComponent {
         this.id = id;
     }
 
+    public IToken getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return id.toString();
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

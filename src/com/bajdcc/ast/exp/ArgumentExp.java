@@ -16,6 +16,10 @@ public class ArgumentExp extends Exp implements IAstComponent {
 
     private List<IExp> arguments = new ArrayList<>();
 
+    public List<IExp> getArguments() {
+        return arguments;
+    }
+
     @Override
     public void addChild(@NotNull IExp exp) {
         this.arguments.add(exp);
@@ -31,7 +35,7 @@ public class ArgumentExp extends Exp implements IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

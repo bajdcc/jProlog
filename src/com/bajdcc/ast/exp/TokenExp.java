@@ -17,13 +17,17 @@ public class TokenExp extends Exp implements IAstComponent {
         this.token = token;
     }
 
+    public IToken getToken() {
+        return token;
+    }
+
     @Override
     public String toString() {
         return token.toString();
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

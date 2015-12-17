@@ -32,11 +32,13 @@ public class ConditionStmt extends Stmt implements IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {
-            quantifiers.visit(visitor);
+            if (quantifiers != null) {
+                quantifiers.visit(visitor);
+            }
             exp.visit(visitor);
         }
         if (args.canVisitEnd()) {

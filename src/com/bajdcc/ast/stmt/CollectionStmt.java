@@ -15,7 +15,7 @@ public class CollectionStmt extends Stmt implements IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

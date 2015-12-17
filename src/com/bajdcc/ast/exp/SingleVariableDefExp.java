@@ -24,13 +24,21 @@ public class SingleVariableDefExp extends VariableExp implements IAstComponent {
         return this;
     }
 
+    public IToken getType() {
+        return type;
+    }
+
+    public IExp getIds() {
+        return ids;
+    }
+
     @Override
     public String toString() {
         return String.format("%s %s", type, ids);
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

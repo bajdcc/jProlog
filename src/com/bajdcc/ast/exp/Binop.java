@@ -13,12 +13,24 @@ public class Binop extends Exp implements IAstComponent {
     private OpType type;
     private IExp exp1, exp2;
 
+    public OpType getType() {
+        return type;
+    }
+
     public void setType(@NotNull OpType type) {
         this.type = type;
     }
 
+    public IExp getExp1() {
+        return exp1;
+    }
+
     public void setExp1(@NotNull IExp exp1) {
         this.exp1 = exp1;
+    }
+
+    public IExp getExp2() {
+        return exp2;
     }
 
     public void setExp2(@NotNull IExp exp2) {
@@ -40,7 +52,7 @@ public class Binop extends Exp implements IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

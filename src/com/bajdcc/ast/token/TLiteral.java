@@ -15,6 +15,10 @@ public class TLiteral implements IToken, IAstComponent {
         this.literal = literal.substring(1, literal.length() - 1);
     }
 
+    public String getLiteral() {
+        return literal;
+    }
+
     @Override
     public String toString() {
         return String.format("\"%s\"", literal);
@@ -26,7 +30,17 @@ public class TLiteral implements IToken, IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public TokenType getType() {
+        return TokenType.LITERAL;
+    }
+
+    @Override
+    public Object getValue() {
+        return literal;
+    }
+
+    @Override
+    public void visit(IAstVisitor visitor) throws Exception {
         visitor.visitBegin(this);
         visitor.visitEnd(this);
     }

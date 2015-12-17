@@ -7,5 +7,6 @@ public enum TokenType {
 
     LITERAL,
     NUMBER,
-    ID
+    ID,
+    RANGE
 }

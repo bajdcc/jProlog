@@ -13,91 +13,91 @@ import com.bajdcc.ast.token.TRange;
  */
 public interface IAstVisitor {
 
-    void visitBegin(Block node, AstVisitorArgs args);
+    void visitBegin(Block node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(Block node);
+    void visitEnd(Block node) throws Exception;
 
-    void visitBegin(CollectionStmt node, AstVisitorArgs args);
+    void visitBegin(CollectionStmt node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(CollectionStmt node);
+    void visitEnd(CollectionStmt node) throws Exception;
 
-    void visitBegin(ConditionStmt node, AstVisitorArgs args);
+    void visitBegin(ConditionStmt node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(ConditionStmt node);
+    void visitEnd(ConditionStmt node) throws Exception;
 
-    void visitBegin(SingleVariableStmt node, AstVisitorArgs args);
+    void visitBegin(SingleVariableStmt node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(SingleVariableStmt node);
+    void visitEnd(SingleVariableStmt node) throws Exception;
 
-    void visitBegin(SequenceVariableStmt node, AstVisitorArgs args);
+    void visitBegin(SequenceVariableStmt node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(SequenceVariableStmt node);
+    void visitEnd(SequenceVariableStmt node) throws Exception;
 
-    void visitBegin(ArgumentVariableStmt node, AstVisitorArgs args);
+    void visitBegin(ArgumentVariableStmt node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(ArgumentVariableStmt node);
+    void visitEnd(ArgumentVariableStmt node) throws Exception;
 
-    void visitBegin(CollectionExp node, AstVisitorArgs args);
+    void visitBegin(CollectionExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(CollectionExp node);
+    void visitEnd(CollectionExp node) throws Exception;
 
-    void visitBegin(ArgumentExp node, AstVisitorArgs args);
+    void visitBegin(ArgumentExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(ArgumentExp node);
+    void visitEnd(ArgumentExp node) throws Exception;
 
-    void visitBegin(SingleVariableDefExp node, AstVisitorArgs args);
+    void visitBegin(SingleVariableDefExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(SingleVariableDefExp node);
+    void visitEnd(SingleVariableDefExp node) throws Exception;
 
-    void visitBegin(SingleVariableExp node, AstVisitorArgs args);
+    void visitBegin(SingleVariableExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(SingleVariableExp node);
+    void visitEnd(SingleVariableExp node) throws Exception;
 
-    void visitBegin(SequenceVariableDefExp node, AstVisitorArgs args);
+    void visitBegin(SequenceVariableDefExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(SequenceVariableDefExp node);
+    void visitEnd(SequenceVariableDefExp node) throws Exception;
 
-    void visitBegin(SequenceVariableExp node, AstVisitorArgs args);
+    void visitBegin(SequenceVariableExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(SequenceVariableExp node);
+    void visitEnd(SequenceVariableExp node) throws Exception;
 
-    void visitBegin(ArgumentVariableDefExp node, AstVisitorArgs args);
+    void visitBegin(ArgumentVariableDefExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(ArgumentVariableDefExp node);
+    void visitEnd(ArgumentVariableDefExp node) throws Exception;
 
-    void visitBegin(ArgumentVariableExp node, AstVisitorArgs args);
+    void visitBegin(ArgumentVariableExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(ArgumentVariableExp node);
+    void visitEnd(ArgumentVariableExp node) throws Exception;
 
-    void visitBegin(Sinop node, AstVisitorArgs args);
+    void visitBegin(Sinop node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(Sinop node);
+    void visitEnd(Sinop node) throws Exception;
 
-    void visitBegin(Binop node, AstVisitorArgs args);
+    void visitBegin(Binop node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(Binop node);
+    void visitEnd(Binop node) throws Exception;
 
-    void visitBegin(TokenExp node, AstVisitorArgs args);
+    void visitBegin(TokenExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(TokenExp node);
+    void visitEnd(TokenExp node) throws Exception;
 
-    void visitBegin(QuantifierExp node, AstVisitorArgs args);
+    void visitBegin(QuantifierExp node, AstVisitorArgs args) throws Exception;
 
-    void visitEnd(QuantifierExp node);
+    void visitEnd(QuantifierExp node) throws Exception;
 
-    void visitBegin(TId node);
+    void visitBegin(TId node) throws Exception;
 
-    void visitEnd(TId node);
+    void visitEnd(TId node) throws Exception;
 
-    void visitBegin(TLiteral node);
+    void visitBegin(TLiteral node) throws Exception;
 
-    void visitEnd(TLiteral node);
+    void visitEnd(TLiteral node) throws Exception;
 
-    void visitBegin(TNumber node);
+    void visitBegin(TNumber node) throws Exception;
 
-    void visitEnd(TNumber node);
+    void visitEnd(TNumber node) throws Exception;
 
-    void visitBegin(TRange node);
+    void visitBegin(TRange node) throws Exception;
 
-    void visitEnd(TRange node);
+    void visitEnd(TRange node) throws Exception;
 }

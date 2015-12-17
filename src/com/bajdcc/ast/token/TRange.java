@@ -17,6 +17,14 @@ public class TRange implements IToken, IAstComponent {
         this.upper = Integer.parseInt(upper);
     }
 
+    public int getLower() {
+        return lower;
+    }
+
+    public int getUpper() {
+        return upper;
+    }
+
     @Override
     public String toString() {
         return String.format("%d:%d", lower, upper);
@@ -28,7 +36,17 @@ public class TRange implements IToken, IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public TokenType getType() {
+        return TokenType.RANGE;
+    }
+
+    @Override
+    public Object getValue() {
+        return lower + "-" + upper;
+    }
+
+    @Override
+    public void visit(IAstVisitor visitor) throws Exception {
         visitor.visitBegin(this);
         visitor.visitEnd(this);
     }

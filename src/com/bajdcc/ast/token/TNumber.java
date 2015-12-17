@@ -17,6 +17,14 @@ public class TNumber implements IToken, IAstComponent {
         this.number = Integer.parseInt(number);
     }
 
+    public static TNumber getINVALID() {
+        return INVALID;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
     @Override
     public String toString() {
         return String.valueOf(number);
@@ -28,7 +36,17 @@ public class TNumber implements IToken, IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public TokenType getType() {
+        return TokenType.NUMBER;
+    }
+
+    @Override
+    public Object getValue() {
+        return number;
+    }
+
+    @Override
+    public void visit(IAstVisitor visitor) throws Exception {
         visitor.visitBegin(this);
         visitor.visitEnd(this);
     }

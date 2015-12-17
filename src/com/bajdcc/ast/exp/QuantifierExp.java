@@ -21,6 +21,18 @@ public class QuantifierExp extends Exp implements IAstComponent {
         this.id = id;
     }
 
+    public QuantifierType getQuantifier() {
+        return quantifier;
+    }
+
+    public IToken getType() {
+        return type;
+    }
+
+    public IToken getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         if (quantifier == QuantifierType.EXISTENTIAL) {
@@ -31,7 +43,7 @@ public class QuantifierExp extends Exp implements IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

@@ -15,6 +15,10 @@ public class TId implements IToken, IAstComponent {
         this.id = id;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return id;
@@ -26,7 +30,17 @@ public class TId implements IToken, IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public TokenType getType() {
+        return TokenType.ID;
+    }
+
+    @Override
+    public Object getValue() {
+        return id;
+    }
+
+    @Override
+    public void visit(IAstVisitor visitor) throws Exception {
         visitor.visitBegin(this);
         visitor.visitEnd(this);
     }

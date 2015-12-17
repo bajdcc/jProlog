@@ -19,13 +19,21 @@ public class CollectionExp extends Exp implements IAstComponent {
         this.argument = argument;
     }
 
+    public IToken getType() {
+        return type;
+    }
+
+    public IExp getArgument() {
+        return argument;
+    }
+
     @Override
     public String toString() {
         return String.format("%s = { %s }", type, argument);
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

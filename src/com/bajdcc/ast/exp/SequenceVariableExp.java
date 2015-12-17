@@ -19,6 +19,14 @@ public class SequenceVariableExp extends VariableExp implements IAstComponent {
         this.index = index;
     }
 
+    public IToken getId() {
+        return id;
+    }
+
+    public IToken getIndex() {
+        return index;
+    }
+
     @Override
     public String toString() {
         if (index.isValid()) {
@@ -29,7 +37,7 @@ public class SequenceVariableExp extends VariableExp implements IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

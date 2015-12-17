@@ -13,8 +13,16 @@ public class Sinop extends Exp implements IAstComponent {
     private OpType type;
     private IExp exp;
 
+    public OpType getType() {
+        return type;
+    }
+
     public void setType(@NotNull OpType type) {
         this.type = type;
+    }
+
+    public IExp getExp() {
+        return exp;
     }
 
     public void setExp(IExp exp) {
@@ -36,7 +44,7 @@ public class Sinop extends Exp implements IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

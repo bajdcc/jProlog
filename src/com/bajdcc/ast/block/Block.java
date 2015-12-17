@@ -17,6 +17,10 @@ public class Block implements IBlock, IAstComponent {
 
     private List<IStmt> stmts = new ArrayList<>();
 
+    public List<IStmt> getStmts() {
+        return stmts;
+    }
+
     @Override
     public void addChild(@NotNull IStmt stmt) {
         this.stmts.add(stmt);
@@ -32,7 +36,7 @@ public class Block implements IBlock, IAstComponent {
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {

@@ -19,13 +19,21 @@ public class ArgumentVariableExp extends VariableExp implements IAstComponent {
         this.argument = argument;
     }
 
+    public IToken getId() {
+        return id;
+    }
+
+    public IExp getArgument() {
+        return argument;
+    }
+
     @Override
     public String toString() {
         return String.format("%s(%s)", id, argument);
     }
 
     @Override
-    public void visit(IAstVisitor visitor) {
+    public void visit(IAstVisitor visitor) throws Exception {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {
