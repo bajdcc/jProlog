@@ -37,6 +37,7 @@ public class ArgumentVariableExp extends VariableExp implements IAstComponent {
         AstVisitorArgs args = new AstVisitorArgs();
         visitor.visitBegin(this, args);
         if (args.canVisitChildren()) {
+            id.visit(visitor);
             argument.visit(visitor);
         }
         if (args.canVisitEnd()) {

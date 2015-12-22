@@ -20,6 +20,10 @@ public class RtStack {
         stack.push(new StateStruct(type, token));
     }
 
+    public void push(@NotNull RtBlock.StateType type) {
+        stack.push(new StateStruct(type, null));
+    }
+
     public void pop() {
         stack.pop();
     }
