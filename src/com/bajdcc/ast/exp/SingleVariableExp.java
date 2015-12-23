@@ -11,7 +11,7 @@ import com.sun.istack.internal.NotNull;
  */
 public class SingleVariableExp extends VariableExp implements IAstComponent {
 
-    private IToken id;
+    private final IToken id;
 
     public SingleVariableExp(@NotNull IToken id) {
         this.id = id;

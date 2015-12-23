@@ -12,15 +12,15 @@ public class AstVisitorArgs {
         return visitChildren;
     }
 
-    public void setVisitChildren(boolean visitChildren) {
-        this.visitChildren = visitChildren;
+    public void disableVisitChildren() {
+        this.visitChildren = false;
     }
 
     public boolean canVisitEnd() {
         return visitEnd;
     }
 
-    public void setVisitEnd(boolean visitEnd) {
-        this.visitEnd = visitEnd;
+    public void disableVisitEnd() {
+        this.visitEnd = false;
     }
 }

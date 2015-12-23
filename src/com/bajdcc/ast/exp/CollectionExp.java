@@ -11,8 +11,8 @@ import com.sun.istack.internal.NotNull;
  */
 public class CollectionExp extends Exp implements IAstComponent {
 
-    private IToken type;
-    private IExp argument;
+    private final IToken type;
+    private final IExp argument;
 
     public CollectionExp(@NotNull IToken type, @NotNull IExp argument) {
         this.type = type;
@@ -29,7 +29,7 @@ public class CollectionExp extends Exp implements IAstComponent {
 
     @Override
     public String toString() {
-        return String.format("%s = { %s }", type, argument);
+        return String.format("%s{} = { %s }", type, argument);
     }
 
     @Override

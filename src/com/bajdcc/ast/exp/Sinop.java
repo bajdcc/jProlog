@@ -31,16 +31,19 @@ public class Sinop extends Exp implements IAstComponent {
 
     @Override
     public boolean isToken() {
-        return exp.isToken();
+        return false;
+    }
+
+    @Override
+    public OpType getOp() {
+        return type;
     }
 
     @Override
     public String toString() {
-        if (isToken()) {
-            return String.format("%s %s", type.getName(), exp);
-        } else {
-            return String.format("(%s %s)", type.getName(), exp);
-        }
+        return String.format("%s %s",
+                exp.isToken() ? exp : ("(" + exp + ")"),
+                type.getName());
     }
 
     @Override

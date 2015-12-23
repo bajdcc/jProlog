@@ -1,6 +1,7 @@
 package com.bajdcc;
 
 import com.bajdcc.prolog.PrologExecutor;
+import com.bajdcc.rt.IRtQueryAnswer;
 
 public class Main {
 
@@ -12,11 +13,7 @@ public class Main {
                 "时间 在寓所(所有人);\n" +
                 "所有人 凶手;\n" +
                 "\n" +
-                "时间 辅助变量[];                 //使用辅助变量保证每个人的在寓所时间不同\n" +
-                "辅助变量[1] = 在寓所(\"埃夫里\");\n" +
-                "辅助变量[2] = 在寓所(\"布莱克\");\n" +
-                "辅助变量[3] = 在寓所(\"克朗\");\n" +
-                "辅助变量[4] = 在寓所(\"戴维斯\");\n" +
+                "互斥(在寓所(\"埃夫里\"),在寓所(\"布莱克\"),在寓所(\"克朗\"),在寓所(\"戴维斯\"));\n" +
                 "\n" +
                 "在寓所(凶手) = 死亡时刻;\n" +
                 "\n" +
@@ -31,7 +28,10 @@ public class Main {
                 "\n" +
                 "输出(\"凶手是: \",凶手);\n";
         try {
-            PrologExecutor.getInstance().run(text);
+            IRtQueryAnswer query = PrologExecutor.getInstance().run(text);
+            System.out.println();
+            System.out.println("============= 查询接口 ==============");
+            System.out.println(query.queryValue(0, "凶手", null));
         } catch (Exception e) {
             e.printStackTrace();
         }

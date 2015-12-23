@@ -1,5 +1,9 @@
 package com.bajdcc.rt.adv.exp;
 
+import com.bajdcc.rt.RtEnv;
+import com.bajdcc.rt.error.SemanticException;
+import com.bajdcc.rt.symbol.RtSymbol;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +12,20 @@ import java.util.List;
  */
 public abstract class RtExp {
 
-    private List<RtExp> chilren = new ArrayList<>();
+    private final List<RtExp> chilren = new ArrayList<>();
 
-    public RtExp add(RtExp exp) {
+    public void add(RtExp exp) {
         chilren.add(exp);
-        return this;
+    }
+
+    public void check(RtSymbol symbol, Object[] params) throws SemanticException {
+
+    }
+
+    public abstract RtVal eval(RtEnv env) throws SemanticException;
+
+    public List<RtExp> getChilren() {
+        return chilren;
     }
 
     @Override

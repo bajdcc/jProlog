@@ -14,7 +14,7 @@ import java.util.StringJoiner;
  */
 public class ArgumentExp extends Exp implements IAstComponent {
 
-    private List<IExp> arguments = new ArrayList<>();
+    private final List<IExp> arguments = new ArrayList<>();
 
     public List<IExp> getArguments() {
         return arguments;

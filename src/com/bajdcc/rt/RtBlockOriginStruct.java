@@ -10,11 +10,11 @@ import java.util.List;
  */
 public class RtBlockOriginStruct {
 
-    private List<CollectionStmt> set;
-    private List<SingleVariableStmt> sin;
-    private List<ArgumentVariableStmt> arg;
-    private List<SequenceVariableStmt> seq;
-    private List<ConditionStmt> cond;
+    private final List<CollectionStmt> set;
+    private final List<SingleVariableStmt> sin;
+    private final List<ArgumentVariableStmt> arg;
+    private final List<SequenceVariableStmt> seq;
+    private final List<ConditionStmt> cond;
 
     public RtBlockOriginStruct() {
         set = new ArrayList<>();

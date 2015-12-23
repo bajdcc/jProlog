@@ -11,8 +11,8 @@ import com.sun.istack.internal.NotNull;
  */
 public class SequenceVariableExp extends VariableExp implements IAstComponent {
 
-    private IToken id;
-    private IToken index;
+    private final IToken id;
+    private final IToken index;
 
     public SequenceVariableExp(@NotNull IToken id, @NotNull IToken index) {
         this.id = id;

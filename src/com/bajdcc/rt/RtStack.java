@@ -10,7 +10,7 @@ import java.util.Stack;
  */
 public class RtStack {
 
-    private Stack<StateStruct> stack;
+    private final Stack<StateStruct> stack;
 
     public RtStack() {
         stack = new Stack<>();
@@ -38,14 +38,14 @@ public class RtStack {
     @NotNull
     StateStruct top() {
         if (stack.empty()) {
-            stack.push(new StateStruct(RtBlock.StateType.NONE, null));
+            return new StateStruct(RtBlock.StateType.NONE, null);
         }
         return stack.peek();
     }
 
     public class StateStruct {
-        private RtBlock.StateType type;
-        private IToken token;
+        private final RtBlock.StateType type;
+        private final IToken token;
 
         public StateStruct(RtBlock.StateType type, IToken token) {
             this.type = type;

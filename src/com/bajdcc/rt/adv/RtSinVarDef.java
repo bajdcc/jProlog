@@ -20,4 +20,12 @@ public class RtSinVarDef {
     public int getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return "RtSinVarDef{" +
+                "id=" + id +
+                ", type=" + type +
+                '}';
+    }
 }

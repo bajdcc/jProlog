@@ -20,4 +20,12 @@ public class RtSeqVarDef {
     public int getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return "RtSeqVarDef{" +
+                "id=" + id +
+                ", type=" + type +
+                '}';
+    }
 }

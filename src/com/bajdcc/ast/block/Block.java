@@ -15,7 +15,7 @@ import java.util.StringJoiner;
  */
 public class Block implements IBlock, IAstComponent {
 
-    private List<IStmt> stmts = new ArrayList<>();
+    private final List<IStmt> stmts = new ArrayList<>();
 
     public List<IStmt> getStmts() {
         return stmts;

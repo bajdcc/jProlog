@@ -11,9 +11,9 @@ import com.sun.istack.internal.NotNull;
  */
 public class QuantifierExp extends Exp implements IAstComponent {
 
-    private QuantifierType quantifier;
-    private IToken type;
-    private IToken id;
+    private final QuantifierType quantifier;
+    private final IToken type;
+    private final IToken id;
 
     public QuantifierExp(@NotNull QuantifierType quantifier, @NotNull IToken type, @NotNull IToken id) {
         this.quantifier = quantifier;
@@ -36,9 +36,9 @@ public class QuantifierExp extends Exp implements IAstComponent {
     @Override
     public String toString() {
         if (quantifier == QuantifierType.EXISTENTIAL) {
-            return String.format("存在 %s %s, ", type, id);
+            return String.format("存在 %s 属于 %s, ", id, type);
         } else {
-            return String.format("所有 %s %s, ", type, id);
+            return String.format("任意 %s 属于 %s, ", id, type);
         }
     }
 

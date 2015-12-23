@@ -11,14 +11,10 @@ public class TNumber implements IToken, IAstComponent {
 
     public static final TNumber INVALID = new TNumber("-1");
 
-    private int number;
+    private final int number;
 
     public TNumber(@NotNull String number) {
         this.number = Integer.parseInt(number);
-    }
-
-    public static TNumber getINVALID() {
-        return INVALID;
     }
 
     public int getNumber() {

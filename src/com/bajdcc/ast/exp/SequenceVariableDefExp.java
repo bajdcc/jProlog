@@ -12,7 +12,7 @@ import com.sun.istack.internal.NotNull;
 public class SequenceVariableDefExp extends VariableExp implements IAstComponent {
 
     private IToken type;
-    private IExp ids;
+    private final IExp ids;
 
     public SequenceVariableDefExp(@NotNull IToken type, @NotNull IExp ids) {
         this.type = type;

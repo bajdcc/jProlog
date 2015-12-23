@@ -9,10 +9,20 @@ import java.util.*;
  */
 public class RtStringFactory {
 
-    private List<Val> strList = new ArrayList<>();
-    private Map<String, Integer> strMap = new HashMap<>();
+    private final List<Val> strList = new ArrayList<>();
+    private final Map<String, Integer> strMap = new HashMap<>();
 
     public int query(String str, ValType val) throws SemanticException {
+        if (contains(str)) {
+            Val old = strList.get(strMap.get(str));
+            if (old.contains(val)) {
+                return old.getId();
+            }
+        }
+        throw new SemanticException(str, "对象不存在", SemanticException.SemanticErrorType.UNDECL);
+    }
+
+    public int query(String str, ValType[] val) throws SemanticException {
         if (contains(str)) {
             Val old = strList.get(strMap.get(str));
             if (old.contains(val)) {
@@ -29,7 +39,9 @@ public class RtStringFactory {
     public boolean containsVar(String str) {
         if (contains(str)) {
             Val old = strList.get(strMap.get(str));
-            return !old.containsOnly(ValType.LITERAL);
+            return old.contains(ValType.SINGLE) ||
+                    old.contains(ValType.SEQUENCE) ||
+                    old.contains(ValType.ARGUMENT);
         }
         return false;
     }
@@ -37,14 +49,16 @@ public class RtStringFactory {
     public ValType getVarType(String str) {
         if (contains(str)) {
             Val old = strList.get(strMap.get(str));
-            if (old.contains(ValType.SINGLE)) {
-                return ValType.SINGLE;
-            }
-            if (old.contains(ValType.SEQUENCE)) {
-                return ValType.SEQUENCE;
-            }
-            if (old.contains(ValType.ARGUMENT)) {
-                return ValType.ARGUMENT;
+            final ValType[] typeList = new ValType[]{
+                    ValType.SINGLE,
+                    ValType.SEQUENCE,
+                    ValType.ARGUMENT,
+                    ValType.LITERAL,
+            };
+            for (ValType type : typeList) {
+                if (old.contains(type)) {
+                    return type;
+                }
             }
         }
         return ValType.NONE;
@@ -57,29 +71,26 @@ public class RtStringFactory {
                 return false;
             }
             old.add(val);
+        } else {
+            int id = strList.size();
+            strMap.put(str, id);
+            strList.add(new Val(id, str, val));
         }
-        int id = strList.size();
-        strMap.put(str, id);
-        strList.add(new Val(id, val));
         return true;
     }
 
-    public enum ValType {
-        NONE,
-        SET,
-        LITERAL,
-        SINGLE,
-        SEQUENCE,
-        ARGUMENT,
-        TMPID,
+    public String export(int id) {
+        return strList.get(id).getString();
     }
 
     private class Val {
         private final int id;
-        private Set<ValType> set = new HashSet<>();
+        private final String string;
+        private final Set<ValType> set = new HashSet<>();
 
-        public Val(int id, ValType val) {
+        public Val(int id, String string, ValType val) {
             this.id = id;
+            this.string = string;
             this.set.add(val);
         }
 
@@ -87,8 +98,22 @@ public class RtStringFactory {
             return id;
         }
 
+        public String getString() {
+            return string;
+        }
+
         public boolean contains(ValType val) {
             return set.contains(val);
+        }
+
+        public boolean contains(ValType[] val) {
+            for (ValType type : val) {
+                if (set.contains(type)) {
+                    val[0] = type;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public boolean containsOnly(ValType val) {

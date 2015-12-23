@@ -13,8 +13,8 @@ import com.bajdcc.rt.adv.func.RtValidFunc;
 import com.bajdcc.rt.adv.token.RtTNumber;
 import com.bajdcc.rt.adv.token.RtTString;
 import com.bajdcc.rt.error.SemanticException;
-import com.bajdcc.rt.symbol.RtStringFactory;
 import com.bajdcc.rt.symbol.RtSymbol;
+import com.bajdcc.rt.symbol.ValType;
 import com.bajdcc.visit.AstVisitorArgs;
 import com.bajdcc.visit.IAstVisitor;
 
@@ -26,17 +26,21 @@ import java.util.List;
 public class RtBlock implements IAstVisitor {
 
     private boolean init = true;
-    private RtBlockOriginStruct origin;
-    private RtStack stack;
-    private RtStack stackExp;
-    private RtSymbol symbol;
-    private RtTreeExpBuilder tree;
+    private final RtBlockOriginStruct origin;
+    private final RtStack stack;
+    private final RtStack stackExp;
+    private final RtSymbol symbol;
+    private final RtTreeExpBuilder tree;
     public RtBlock() {
         origin = new RtBlockOriginStruct();
         stack = new RtStack();
         stackExp = new RtStack();
         symbol = new RtSymbol();
         tree = new RtTreeExpBuilder();
+    }
+
+    public RtSymbol getSymbol() {
+        return symbol;
     }
 
     public void visitAgain() throws Exception {
@@ -73,8 +77,8 @@ public class RtBlock implements IAstVisitor {
     @Override
     public void visitBegin(CollectionStmt node, AstVisitorArgs args) throws Exception {
         if (init) {
-            args.setVisitChildren(false);
-            args.setVisitEnd(false);
+            args.disableVisitChildren();
+            args.disableVisitEnd();
             origin.getSet().add(node);
         }
     }
@@ -87,11 +91,14 @@ public class RtBlock implements IAstVisitor {
     @Override
     public void visitBegin(ConditionStmt node, AstVisitorArgs args) throws Exception {
         if (init) {
-            args.setVisitChildren(false);
-            args.setVisitEnd(false);
+            args.disableVisitChildren();
+            args.disableVisitEnd();
             origin.getCond().add(node);
         } else {
             stack.push(StateType.COND);
+            if (node.getQuantifiers() != null) {
+                stackExp.push(StateType.QUAN);
+            }
         }
     }
 
@@ -99,15 +106,14 @@ public class RtBlock implements IAstVisitor {
     public void visitEnd(ConditionStmt node) throws Exception {
         stack.pop();
         symbol.registerFunc(tree.getFunc());
-        System.out.println(tree.getFunc());
         tree.clearFunc();
     }
 
     @Override
     public void visitBegin(SingleVariableStmt node, AstVisitorArgs args) throws Exception {
         if (init) {
-            args.setVisitChildren(false);
-            args.setVisitEnd(false);
+            args.disableVisitChildren();
+            args.disableVisitEnd();
             origin.getSin().add(node);
         }
     }
@@ -120,8 +126,8 @@ public class RtBlock implements IAstVisitor {
     @Override
     public void visitBegin(SequenceVariableStmt node, AstVisitorArgs args) throws Exception {
         if (init) {
-            args.setVisitChildren(false);
-            args.setVisitEnd(false);
+            args.disableVisitChildren();
+            args.disableVisitEnd();
             origin.getSeq().add(node);
         }
     }
@@ -134,8 +140,8 @@ public class RtBlock implements IAstVisitor {
     @Override
     public void visitBegin(ArgumentVariableStmt node, AstVisitorArgs args) throws Exception {
         if (init) {
-            args.setVisitChildren(false);
-            args.setVisitEnd(false);
+            args.disableVisitChildren();
+            args.disableVisitEnd();
             origin.getArg().add(node);
         }
     }
@@ -161,7 +167,9 @@ public class RtBlock implements IAstVisitor {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.COND) {
             tree.push(new RtArgs());
-            stackExp.push(StateType.PARAM);
+            if (stackExp.top().getType() != StateType.QUAN) {
+                stackExp.push(StateType.PARAM);
+            }
         }
     }
 
@@ -169,7 +177,11 @@ public class RtBlock implements IAstVisitor {
     public void visitEnd(ArgumentExp node) throws Exception {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.COND) {
+            RtExp args = tree.current();
             tree.pop();
+            if (stackExp.top().getType() != StateType.QUAN) {
+                tree.current().check(symbol, new Object[]{args.getChilren().size()});
+            }
             stackExp.pop();
         }
     }
@@ -189,11 +201,11 @@ public class RtBlock implements IAstVisitor {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.SIN) {
             symbol.registerSingleVariable(state.getToken().toString(), node.getId().toString());
-            args.setVisitChildren(false);
-            args.setVisitEnd(false);
+            args.disableVisitChildren();
+            args.disableVisitEnd();
         } else if (state.getType() == StateType.COND) {
-            tree.push(new RtVar(RtVar.VarType.SIN,
-                    symbol.query(String.valueOf(node.getId().getValue()), RtStringFactory.ValType.SINGLE)));
+            tree.push(new RtVar(ValType.SINGLE,
+                    symbol.query(String.valueOf(node.getId().getValue()), ValType.SINGLE)));
             stackExp.push(StateType.SIN);
         }
     }
@@ -222,14 +234,14 @@ public class RtBlock implements IAstVisitor {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.SEQ) {
             symbol.registerSequenceVariable(state.getToken().toString(), node.getId().toString());
-            args.setVisitChildren(false);
-            args.setVisitEnd(false);
+            args.disableVisitChildren();
+            args.disableVisitEnd();
         } else if (state.getType() == StateType.COND) {
-            if (!tree.available()) {
+            if (tree.isEmptyFunc()) {
                 tree.setFunc(new RtValidFunc());
             }
-            tree.push(new RtVar(RtVar.VarType.SEQ,
-                    symbol.query(String.valueOf(node.getId().getValue()), RtStringFactory.ValType.SEQUENCE)));
+            tree.push(new RtVar(ValType.SEQUENCE,
+                    symbol.query(String.valueOf(node.getId().getValue()), ValType.SEQUENCE)));
             stackExp.push(StateType.SEQ);
         }
     }
@@ -263,19 +275,21 @@ public class RtBlock implements IAstVisitor {
             }
         } else if (state.getType() == StateType.COND) {
             String name = String.valueOf(node.getId().getValue());
-            if (!tree.available() && RtFuncFactory.getInstance().contains(name)) {
+            if (tree.isEmptyFunc() && RtFuncFactory.getInstance().contains(name)) {
                 if (!tree.empty()) {
                     throw new SemanticException(name, "函数调用应是单独的语句",
                             SemanticException.SemanticErrorType.ETOKEN);
                 }
                 tree.setFunc(RtFuncFactory.getInstance().createFunc(name));
-                tree.push(new RtVar(RtVar.VarType.FUNC,
+                tree.push(new RtVar(ValType.FUNC,
                         RtFuncFactory.getInstance().getTypeIndex(name)
                 ));
             } else {
-                tree.setFunc(new RtValidFunc());
-                tree.push(new RtVar(RtVar.VarType.ARG,
-                        symbol.query(name, RtStringFactory.ValType.ARGUMENT)
+                if (tree.isEmptyFunc()) {
+                    tree.setFunc(new RtValidFunc());
+                }
+                tree.push(new RtVar(ValType.ARGUMENT,
+                        symbol.query(name, ValType.ARGUMENT)
                 ));
             }
             stackExp.push(StateType.ARG);
@@ -297,7 +311,7 @@ public class RtBlock implements IAstVisitor {
     public void visitBegin(Sinop node, AstVisitorArgs args) throws Exception {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.COND) {
-            if (!tree.available()) {
+            if (tree.isEmptyFunc()) {
                 tree.setFunc(new RtValidFunc());
             }
             tree.push(new RtSop(node.getType()));
@@ -308,6 +322,10 @@ public class RtBlock implements IAstVisitor {
     public void visitEnd(Sinop node) throws Exception {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.COND) {
+            RtSop sop = (RtSop) tree.current();
+            if (sop.getChilren().size() != 1) {
+                throw new RuntimeException();
+            }
             tree.pop();
         }
     }
@@ -316,7 +334,7 @@ public class RtBlock implements IAstVisitor {
     public void visitBegin(Binop node, AstVisitorArgs args) throws Exception {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.COND) {
-            if (!tree.available()) {
+            if (tree.isEmptyFunc()) {
                 tree.setFunc(new RtValidFunc());
             }
             tree.push(new RtBop(node.getType()));
@@ -327,7 +345,27 @@ public class RtBlock implements IAstVisitor {
     public void visitEnd(Binop node) throws Exception {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.COND) {
+            RtBop bop = (RtBop) tree.current();
+            if (bop.getChilren().size() != 2) {
+                throw new RuntimeException();
+            }
             tree.pop();
+            if (tree.empty()
+                    && node.getType() == OpType.EQ
+                    && bop.getChilren().get(0) instanceof RtVar
+                    && bop.getChilren().get(1) instanceof RtTExp) {
+                RtExp var = bop.getChilren().get(0);
+                if (((RtVar) bop.getChilren().get(0)).getType() != ValType.ARGUMENT) {
+                    return;
+                }
+                for (RtExp exp : var.getChilren().get(0).getChilren()) {
+                    if (!(exp instanceof RtTExp)) {
+                        return;
+                    }
+                }
+                RtValidFunc func = (RtValidFunc) tree.getFunc();
+                func.setQuick(true);
+            }
         }
     }
 
@@ -336,10 +374,10 @@ public class RtBlock implements IAstVisitor {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.ARG) {
             symbol.registerArgumentVariableType(node.getToken().toString(), state.getToken().toString());
-            args.setVisitChildren(false);
-            args.setVisitEnd(false);
+            args.disableVisitChildren();
+            args.disableVisitEnd();
         } else if (state.getType() == StateType.COND) {
-            if (!tree.available()) {
+            if (tree.isEmptyFunc()) {
                 throw new SemanticException(node.toString(), "表达式为永真或永假",
                         SemanticException.SemanticErrorType.ETOKEN);
             }
@@ -353,14 +391,14 @@ public class RtBlock implements IAstVisitor {
 
     @Override
     public void visitBegin(QuantifierExp node, AstVisitorArgs args) throws Exception {
-        if (!tree.available()) {
+        if (tree.isEmptyFunc()) {
             tree.setFunc(new RtValidFunc());
         }
         symbol.registerTmpVar(String.valueOf(node.getId().getValue()));
         RtValidFunc valid = (RtValidFunc) tree.getFunc();
         valid.add(node.getQuantifier(),
-                symbol.query(String.valueOf(node.getType().getValue()), RtStringFactory.ValType.SET),
-                symbol.query(String.valueOf(node.getId().getValue()), RtStringFactory.ValType.TMPID));
+                symbol.query(String.valueOf(node.getType().getValue()), ValType.SET),
+                symbol.query(String.valueOf(node.getId().getValue()), ValType.TMPID));
     }
 
     @Override
@@ -371,15 +409,18 @@ public class RtBlock implements IAstVisitor {
     public void visitBegin(TId node) throws Exception {
         RtStack.StateStruct state = stack.top();
         if (state.getType() == StateType.COND) {
-            if (!tree.available()) {
+            if (tree.isEmptyFunc()) {
                 tree.setFunc(new RtValidFunc());
             }
             switch (stackExp.top().getType()) {
                 case NONE:
                 case PARAM:
-                    tree.current().add(new RtVar(RtVar.VarType.SIN,
-                            symbol.query(String.valueOf(node.getValue()), RtStringFactory.ValType.SINGLE)
-                    ));
+                    ValType[] types = new ValType[]{
+                            ValType.SINGLE,
+                            ValType.TMPID,
+                    };
+                    int id = symbol.query(String.valueOf(node.getValue()), types);
+                    tree.current().add(new RtVar(types[0], id));
                     break;
             }
         }
@@ -398,7 +439,7 @@ public class RtBlock implements IAstVisitor {
         } else if (state.getType() == StateType.COND) {
             symbol.registerLiteral(String.valueOf(node.getValue()));
             tree.current().add(new RtTExp(new RtTString(symbol.query(String.valueOf(node.getValue()),
-                    RtStringFactory.ValType.LITERAL))));
+                    ValType.LITERAL))));
         }
     }
 
@@ -414,7 +455,9 @@ public class RtBlock implements IAstVisitor {
             symbol.registerTypeValue(stack.top().getToken().toString(), node.getValue());
         } else if (state.getType() == StateType.COND) {
             symbol.registerLiteral(String.valueOf(node.getValue()));
-            tree.current().add(new RtTExp(new RtTNumber((int) node.getValue())));
+            int index = (int) node.getValue();
+            tree.current().check(symbol, new Object[]{index});
+            tree.current().add(new RtTExp(new RtTNumber(index)));
         }
     }
 
@@ -451,5 +494,6 @@ public class RtBlock implements IAstVisitor {
         ARG,
         COND,
         PARAM,
+        QUAN,
     }
 }

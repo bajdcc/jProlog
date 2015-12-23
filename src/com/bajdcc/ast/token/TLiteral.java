@@ -9,7 +9,7 @@ import com.sun.istack.internal.NotNull;
  */
 public class TLiteral implements IToken, IAstComponent {
 
-    private String literal;
+    private final String literal;
 
     public TLiteral(@NotNull String literal) {
         this.literal = literal.substring(1, literal.length() - 1);

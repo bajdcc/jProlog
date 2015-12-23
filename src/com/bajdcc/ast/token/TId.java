@@ -9,7 +9,7 @@ import com.sun.istack.internal.NotNull;
  */
 public class TId implements IToken, IAstComponent {
 
-    private String id;
+    private final String id;
 
     public TId(@NotNull String id) {
         this.id = id;

@@ -10,7 +10,7 @@ public class RtArgVarDef {
 
     private final int id;
     private final int type;
-    private List<Integer> elements = new ArrayList<>();
+    private final List<Integer> elements = new ArrayList<>();
 
     public RtArgVarDef(int id, int type) {
         this.id = id;
@@ -27,5 +27,22 @@ public class RtArgVarDef {
 
     public int getType() {
         return type;
+    }
+
+    public int getElementCount() {
+        return elements.size();
+    }
+
+    public List<Integer> getElements() {
+        return elements;
+    }
+
+    @Override
+    public String toString() {
+        return "RtArgVarDef{" +
+                "id=" + id +
+                ", type=" + type +
+                ", elements=" + elements +
+                '}';
     }
 }

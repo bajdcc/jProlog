@@ -22,6 +22,10 @@ public class ConditionStmt extends Stmt implements IAstComponent {
         this.quantifiers = quantifiers;
     }
 
+    public IExp getQuantifiers() {
+        return quantifiers;
+    }
+
     @Override
     public String toString() {
         if (quantifiers != null) {

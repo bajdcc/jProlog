@@ -10,8 +10,8 @@ import java.util.Map;
  * 方法工厂
  */
 public class RtFuncFactory {
-    private static RtFuncFactory ourInstance = new RtFuncFactory();
-    private Map<String, FuncType> nameMap = new HashMap<>();
+    private static final RtFuncFactory ourInstance = new RtFuncFactory();
+    private final Map<String, FuncType> nameMap = new HashMap<>();
 
     private RtFuncFactory() {
         for (FuncType type : FuncType.values()) {
@@ -41,15 +41,18 @@ public class RtFuncFactory {
                 return new RtMutexFunc();
             case PRINT:
                 return new RtPrintFunc();
+            case SETTING:
+                return new RtSettingFunc();
         }
         throw new NotImplementedException();
     }
 
     private enum FuncType {
         MUTEX("互斥"),
-        PRINT("输出"),;
+        PRINT("输出"),
+        SETTING("设置");
 
-        private String name;
+        private final String name;
 
         FuncType(String name) {
             this.name = name;

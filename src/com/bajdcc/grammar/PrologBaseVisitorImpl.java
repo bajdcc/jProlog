@@ -149,8 +149,8 @@ public class PrologBaseVisitorImpl extends PrologBaseVisitor<AstStruct> {
     public AstStruct visitConditionDef(PrologParser.ConditionDefContext ctx) {
         if (ctx.quantifiers() != null) {
             return new AstStruct(new ConditionStmt(
-                    visit(ctx.quantifiers()).getExp(),
-                    visit(ctx.expression()).getExp()));
+                    visit(ctx.expression()).getExp(),
+                    visit(ctx.quantifiers()).getExp()));
         } else {
             return new AstStruct(new ConditionStmt(
                     visit(ctx.expression()).getExp()));

@@ -12,7 +12,7 @@ import java.util.Stack;
 public class RtTreeExpBuilder {
 
     private RtFunc func;
-    private Stack<RtExp> path = new Stack<>();
+    private final Stack<RtExp> path = new Stack<>();
 
     public void push(@NotNull RtExp exp) {
         if (!path.empty()) {
@@ -22,8 +22,7 @@ public class RtTreeExpBuilder {
     }
 
     public void pop() {
-        if (path.size() == 1) {
-            assert this.func != null;
+        if (path.size() == 1 && this.func != null) {
             this.func.set(path.peek());
         }
         path.pop();
@@ -37,13 +36,14 @@ public class RtTreeExpBuilder {
         return path.empty();
     }
 
-    public boolean available() {
-        return this.func != null;
+    public boolean isEmptyFunc() {
+        return this.func == null;
     }
 
     public void clearFunc() {
-        assert this.func != null;
-        assert this.path.empty();
+        if (this.func == null || !this.path.empty()) {
+            throw new RuntimeException();
+        }
         this.func = null;
     }
 
@@ -52,7 +52,9 @@ public class RtTreeExpBuilder {
     }
 
     public void setFunc(@NotNull RtFunc func) {
-        assert this.func == null;
+        if (this.func != null) {
+            throw new RuntimeException();
+        }
         this.func = func;
     }
 }

@@ -59,11 +59,11 @@ conditionDef
     ;
 
 quantifiers
-    :   quantifier (COMMA quantifier)*
+    :   (quantifier COMMA)+
     ;
 
 quantifier
-    :   (Existential | Universal) type=ID id=ID
+    :   AT (Existential | Universal) id=ID (Belong) type=ID
     ;
 
 parameters
@@ -92,8 +92,9 @@ expression
 
 // TOKEN
 
-Existential : '存在';
-Universal : '所有';
+Existential : '\u5b58' '\u5728';
+Universal : '\u4efb' '\u610f';
+Belong : '\u5c5e' '\u4e8e';
 
 NOT : ('!' | '~');
 ART1 : (Star | Div | Mod);
@@ -107,6 +108,7 @@ LOG2 : ('|' | '||');
 XOR : ('^');
 IMPLY : ('->');
 
+AT : '@';
 SEMI : ';';
 COMMA : ',';
 RANGE : '..';

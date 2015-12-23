@@ -11,8 +11,8 @@ import com.sun.istack.internal.NotNull;
  */
 public class ArgumentVariableDefExp extends VariableExp implements IAstComponent {
 
-    private IToken type;
-    private IExp ids;
+    private final IToken type;
+    private final IExp ids;
 
     public ArgumentVariableDefExp(@NotNull IToken type, @NotNull IExp ids) {
         this.type = type;

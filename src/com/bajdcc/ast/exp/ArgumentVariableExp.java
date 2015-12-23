@@ -11,8 +11,8 @@ import com.sun.istack.internal.NotNull;
  */
 public class ArgumentVariableExp extends VariableExp implements IAstComponent {
 
-    private IToken id;
-    private IExp argument;
+    private final IToken id;
+    private final IExp argument;
 
     public ArgumentVariableExp(@NotNull IToken id, @NotNull IExp argument) {
         this.id = id;

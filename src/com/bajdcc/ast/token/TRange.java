@@ -9,8 +9,8 @@ import com.sun.istack.internal.NotNull;
  */
 public class TRange implements IToken, IAstComponent {
 
-    private int lower;
-    private int upper;
+    private final int lower;
+    private final int upper;
 
     public TRange(@NotNull String lower, @NotNull String upper) {
         this.lower = Integer.parseInt(lower);

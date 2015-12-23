@@ -13,6 +13,10 @@ public abstract class RtFunc {
         this.exp = exp;
     }
 
+    public RtExp getExp() {
+        return exp;
+    }
+
     @Override
     public String toString() {
         return "RtFunc{" +

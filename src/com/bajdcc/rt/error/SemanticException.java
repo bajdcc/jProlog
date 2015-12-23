@@ -5,8 +5,8 @@ package com.bajdcc.rt.error;
  */
 public class SemanticException extends Exception {
 
-    private SemanticErrorType type;
-    private Object info;
+    private final SemanticErrorType type;
+    private final Object info;
 
     public SemanticException(Object info, String message, SemanticErrorType type) {
         super(message);
@@ -29,7 +29,10 @@ public class SemanticException extends Exception {
         UNDECL("未定义"),
         NETYPE("类型不一致"),
         ERANGE("范围非法"),
-        ETOKEN("表达式无意义"),;
+        ETOKEN("表达式无意义"),
+        EPARAM("参数非法"),
+        ENIMPL("尚未实现"),
+        ENOANS("无可用解");
 
         private String name;
 

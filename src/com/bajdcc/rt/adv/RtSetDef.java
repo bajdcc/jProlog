@@ -2,7 +2,9 @@ package com.bajdcc.rt.adv;
 
 import com.bajdcc.rt.error.SemanticException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,7 +14,8 @@ public class RtSetDef {
 
     private final int id;
     private SetType type = SetType.NONE;
-    private Set<Integer> elements = new HashSet<>();
+    private final Set<Integer> elements = new HashSet<>();
+    private final List<Integer> list = new ArrayList<>();
 
     public RtSetDef(int id) {
         this.id = id;
@@ -29,6 +32,7 @@ public class RtSetDef {
             throw new SemanticException(id, "集合数字重复定义", SemanticException.SemanticErrorType.REDECL);
         }
         elements.add(id);
+        list.add(id);
     }
 
     public void addLiteral(int id) throws SemanticException {
@@ -42,15 +46,38 @@ public class RtSetDef {
             throw new SemanticException(id, "集合字串重复定义", SemanticException.SemanticErrorType.REDECL);
         }
         elements.add(id);
+        list.add(id);
+    }
+
+    public SetType getType() {
+        return type;
     }
 
     public int getId() {
         return id;
     }
 
-    private enum SetType {
-        NONE,
-        LITERAL,
-        NUMBER
+    public int getElementCount() {
+        return elements.size();
+    }
+
+    public int getIndex(int id) {
+        if (elements.contains(id)) {
+            return list.indexOf(id) + 1;
+        }
+        return -1;
+    }
+
+    public int getElementById(int id) {
+        return list.get(id - 1);
+    }
+
+    @Override
+    public String toString() {
+        return "RtSetDef{" +
+                "id=" + id +
+                ", type=" + type +
+                ", elements=" + list +
+                '}';
     }
 }

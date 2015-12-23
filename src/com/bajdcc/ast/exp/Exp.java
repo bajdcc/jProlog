@@ -20,4 +20,9 @@ public abstract class Exp implements IExp {
     public boolean isToken() {
         return true;
     }
+
+    @Override
+    public OpType getOp() {
+        return null;
+    }
 }

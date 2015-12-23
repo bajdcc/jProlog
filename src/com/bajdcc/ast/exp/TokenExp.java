@@ -11,7 +11,7 @@ import com.sun.istack.internal.NotNull;
  */
 public class TokenExp extends Exp implements IAstComponent {
 
-    private IToken token;
+    private final IToken token;
 
     public TokenExp(@NotNull IToken token) {
         this.token = token;

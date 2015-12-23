@@ -39,16 +39,20 @@ public class Binop extends Exp implements IAstComponent {
 
     @Override
     public boolean isToken() {
-        return exp1.isToken() && exp2.isToken();
+        return false;
+    }
+
+    @Override
+    public OpType getOp() {
+        return type;
     }
 
     @Override
     public String toString() {
-        if (isToken()) {
-            return String.format("%s %s %s", exp1, type.getName(), exp2);
-        } else {
-            return String.format("(%s %s %s)", exp1, type.getName(), exp2);
-        }
+        return String.format("%s %s %s",
+                (exp1.isToken() || OpType.gte(exp1.getOp(), type)) ? (exp1) : ("(" + exp1 + ")"),
+                type.getName(),
+                (exp2.isToken() || OpType.gte(exp2.getOp(), type)) ? (exp2) : ("(" + exp2 + ")"));
     }
 
     @Override

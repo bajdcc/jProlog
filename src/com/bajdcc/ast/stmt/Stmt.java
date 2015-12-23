@@ -8,7 +8,7 @@ import com.sun.istack.internal.NotNull;
  */
 public abstract class Stmt implements IStmt {
 
-    protected IExp exp;
+    protected final IExp exp;
 
     public Stmt(@NotNull IExp exp) {
         this.exp = exp;

@@ -29,4 +29,9 @@ public interface IExp extends IAstComponent {
      * @return 是否是左值
      */
     boolean isToken();
+
+    /**
+     * @return 操作符
+     */
+    OpType getOp();
 }
