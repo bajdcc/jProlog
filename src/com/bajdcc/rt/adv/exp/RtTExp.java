@@ -20,6 +20,11 @@ public class RtTExp extends RtExp {
     }
 
     @Override
+    public RtTExp tryGetToken() throws SemanticException {
+        return this;
+    }
+
+    @Override
     public RtVal eval(RtEnv env) throws SemanticException {
         return new RtVal(token.getType(), token.getIntValue());
     }

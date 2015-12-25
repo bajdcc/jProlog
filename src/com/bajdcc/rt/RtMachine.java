@@ -23,6 +23,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
  * 运行时机器
@@ -36,6 +37,8 @@ public class RtMachine implements IRtQueryAnswer {
     private final RtGenCenter gen;
     private final List<RtEnv> savedEnv;
     private final RtSettings settings;
+    private PrintStream out;
+    private Future<Object> future;
 
     public RtMachine(@NotNull RtBlock block, boolean debug) throws SemanticException {
         this.symbol = block.getSymbol();
@@ -121,31 +124,79 @@ public class RtMachine implements IRtQueryAnswer {
     }
 
     public IRtQueryAnswer run() throws SemanticException, CloneNotSupportedException {
-        BigInteger cc = BigInteger.ZERO;
+        init();
+        report();
+        long cc = 0;
+        boolean timer = false;
+        long start = System.currentTimeMillis();
+        long ms = 0;
+        long tm = 0;
+        long during = 10000;
+        if (settings.reportTimer != -1) {
+            timer = true;
+            ms = System.currentTimeMillis();
+            during = settings.reportTimer;
+        }
         for (; !gen.isEnd(); gen.next()) {
             if (env.check()) {
-                if (debug) {
-                    savedEnv.add(env.clone());
-                    PrintStream out = PrologExecutor.getInstance().getOut();
-                    out.println(">> 输出结果");
-                    out.println("");
-                    out.println("============= 输出 #" + savedEnv.size() + " ==============");
-                    env.print();
-                    out.println();
-                } else {
-                    env.print();
-                }
+                savedEnv.add(env.clone());
+                PrintStream out = PrologExecutor.getInstance().getOut();
+                out.println(">>");
+                out.println(">> 输出结果");
+                out.println("");
+                out.println("============= 输出 #" + savedEnv.size() + " ==============");
+                env.print();
+                out.println();
                 if (!settings.multiAnswer) {
                     break;
                 }
             }
-            cc = cc.add(BigInteger.ONE);
+            if (debug || timer) {
+                cc++;
+            }
+            if (timer) {
+                if (System.currentTimeMillis() - ms > during) {
+                    ms = System.currentTimeMillis();
+                    tm += during;
+                    out.println(">> 定时: " + tm + "ms, " + cc + " cycles.");
+                }
+            }
+            if (future.isCancelled()) {
+                out.println(">>");
+                out.println(">> 收到中止信号!!!");
+                out.println(">>");
+                out.println(">> 运行时间: " + (System.currentTimeMillis() - start) + "ms");
+                return this;
+            }
         }
         if (debug) {
             PrintStream out = PrologExecutor.getInstance().getOut();
             out.println(">> 运行循环次数: " + cc);
+        } else {
+            out.println(">> 运行时间: " + (System.currentTimeMillis() - start) + "ms");
         }
         return this;
+    }
+
+    private void init() {
+        out = PrologExecutor.getInstance().getOut();
+        future = PrologExecutor.getInstance().getFuture();
+    }
+
+    private void report() {
+        out.println(">>");
+        out.println(">> 开关:");
+        if (settings.multiAnswer) {
+            out.println(">>    * 多解");
+        }
+        if (settings.reportTimer != -1) {
+            out.println(">>    * 定时 = " + settings.reportTimer);
+        }
+        if (settings.displayCopyright != null && !settings.displayCopyright.isEmpty()) {
+            out.println(">>    * ### 版权所有 ###");
+            out.println(">>    *   作者 = " + settings.displayCopyright);
+        }
+        out.println(">>");
     }
 
     @Override

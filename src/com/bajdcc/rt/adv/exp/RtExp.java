@@ -1,6 +1,7 @@
 package com.bajdcc.rt.adv.exp;
 
 import com.bajdcc.rt.RtEnv;
+import com.bajdcc.rt.adv.token.RtToken;
 import com.bajdcc.rt.error.SemanticException;
 import com.bajdcc.rt.symbol.RtSymbol;
 
@@ -26,6 +27,11 @@ public abstract class RtExp {
 
     public List<RtExp> getChilren() {
         return chilren;
+    }
+
+    public RtTExp tryGetToken() throws SemanticException {
+        throw new SemanticException("当前类型不是终结符", "所求类型无效",
+                SemanticException.SemanticErrorType.NETYPE);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.bajdcc.rt.IRtQueryAnswer;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.util.concurrent.Future;
 
 /**
  * 执行程序
@@ -12,6 +13,7 @@ import java.io.Reader;
 public class PrologExecutor {
     private static final PrologExecutor ourInstance = new PrologExecutor();
     private PrintStream out = System.out;
+    private Future<Object> future;
 
     private PrologExecutor() {
     }
@@ -20,12 +22,20 @@ public class PrologExecutor {
         return ourInstance;
     }
 
-    public PrintStream getOut() {
+    public synchronized PrintStream getOut() {
         return out;
     }
 
-    public void setOut(PrintStream out) {
+    public synchronized void setOut(PrintStream out) {
         this.out = out;
+    }
+
+    public synchronized Future<Object> getFuture() {
+        return future;
+    }
+
+    public synchronized void setFuture(Future<Object> future) {
+        this.future = future;
     }
 
     public IRtQueryAnswer runWithDebug(String text) throws Exception {

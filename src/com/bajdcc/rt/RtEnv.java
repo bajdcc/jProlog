@@ -65,6 +65,10 @@ public class RtEnv implements Cloneable {
         }
     }
 
+    public RtStringFactory getStringFactory() {
+        return sf;
+    }
+
     public RtBlockAdvanceStruct getAdv() {
         return adv;
     }
