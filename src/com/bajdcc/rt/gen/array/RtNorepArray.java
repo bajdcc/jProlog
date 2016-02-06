@@ -57,7 +57,7 @@ public class RtNorepArray implements IRtArray {
         int ak = narr[k];
         for (int i = j + 1; i < ret; i++) {
             int ai = narr[i];
-            if (ai > ak && ai < narr[j]) {
+            if (ai > ak && ai <= narr[j]) {
                 j = i;
             }
         }
